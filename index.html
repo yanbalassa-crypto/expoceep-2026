@@ -4,218 +4,561 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Motor 3D Interativo</title>
+  <title>Motor 4 Tempos | Modelo Interativo</title>
 
   <style>
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: Arial, sans-serif;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #080d14;
+      --panel: #111923;
+      --panel2: #182330;
+      --text: #e7edf5;
+      --muted: #91a0b2;
+      --accent: #ff9d00;
+      --blue: #27a8ff;
     }
 
     body {
-      background: #111827;
-      color: white;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at 50% 0%, #1c2b3a 0%, #080d14 45%);
+      color: var(--text);
       min-height: 100vh;
     }
 
     header {
+      padding: 28px 20px;
       text-align: center;
-      padding: 25px;
-      background: #0b1120;
-      border-bottom: 1px solid #334155;
+      border-bottom: 1px solid #273545;
+      background: rgba(8, 13, 20, 0.85);
+    }
+
+    header .tag {
+      display: inline-block;
+      padding: 7px 14px;
+      border: 1px solid #34475b;
+      border-radius: 20px;
+      color: var(--blue);
+      font-size: 12px;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
     }
 
     header h1 {
-      color: #38bdf8;
-      margin-bottom: 8px;
+      font-size: clamp(25px, 5vw, 42px);
+      margin-bottom: 10px;
     }
 
     header p {
-      color: #cbd5e1;
+      color: var(--muted);
+      max-width: 700px;
+      margin: auto;
+      line-height: 1.5;
     }
 
     .container {
-      display: flex;
-      gap: 25px;
-      max-width: 1200px;
+      width: min(1400px, 95%);
       margin: 30px auto;
-      padding: 20px;
+      display: grid;
+      grid-template-columns: minmax(600px, 2fr) minmax(280px, 1fr);
+      gap: 22px;
     }
 
-    /* ÁREA DO MOTOR */
-    .motor-area {
-      flex: 1.4;
-      min-height: 500px;
-      background: #1e293b;
-      border-radius: 20px;
-      position: relative;
+    .engine-panel,
+    .info-panel {
+      background: linear-gradient(145deg, rgba(24,35,48,.96), rgba(12,19,27,.96));
+      border: 1px solid #2c3c4d;
+      border-radius: 22px;
+      box-shadow: 0 20px 50px rgba(0,0,0,.3);
+    }
+
+    .engine-panel {
+      padding: 20px;
       overflow: hidden;
-      border: 1px solid #475569;
     }
 
-    .motor-area h2 {
-      text-align: center;
-      padding: 20px;
-      color: #e2e8f0;
-    }
-
-    .motor {
-      position: relative;
-      width: 600px;
-      max-width: 100%;
-      height: 400px;
-      margin: 20px auto;
-    }
-
-    /* PEÇAS CLICÁVEIS */
-    .peca {
-      position: absolute;
-      cursor: pointer;
-      transition: 0.3s;
-      border: 2px solid transparent;
-    }
-
-    .peca:hover {
-      transform: scale(1.08);
-      filter: brightness(1.3);
-    }
-
-    .peca.ativa {
-      border: 4px solid #facc15;
-      box-shadow: 0 0 25px #facc15;
-      z-index: 10;
-    }
-
-    /* BLOCO DO MOTOR */
-    .bloco {
-      width: 390px;
-      height: 180px;
-      background: linear-gradient(135deg, #64748b, #334155);
-      border-radius: 20px;
-      left: 100px;
-      top: 120px;
-      cursor: default;
-    }
-
-    /* CILINDROS */
-    .cilindro {
-      width: 75px;
-      height: 140px;
-      background: #475569;
-      border-radius: 10px;
-      top: 140px;
-    }
-
-    /* PISTÕES */
-    .pistao {
-      width: 55px;
-      height: 50px;
-      background: linear-gradient(#e5e7eb, #94a3b8);
-      border-radius: 8px;
-      top: 180px;
-    }
-
-    /* BIELAS */
-    .biela {
-      width: 18px;
-      height: 110px;
-      background: #94a3b8;
-      border-radius: 10px;
-      transform-origin: top;
-      top: 225px;
-    }
-
-    /* VIRABREQUIM */
-    .virabrequim {
-      width: 330px;
-      height: 30px;
-      background: #f97316;
-      border-radius: 20px;
-      left: 130px;
-      top: 330px;
-    }
-
-    /* CABEÇOTE */
-    .cabecote {
-      width: 400px;
-      height: 65px;
-      background: linear-gradient(#94a3b8, #475569);
-      border-radius: 15px;
-      left: 95px;
-      top: 65px;
-    }
-
-    /* VÁLVULAS */
-    .valvula {
-      width: 16px;
-      height: 65px;
-      background: #22c55e;
-      border-radius: 10px;
-      top: 85px;
-    }
-
-    /* VELA */
-    .vela {
-      width: 22px;
-      height: 65px;
-      background: #38bdf8;
-      border-radius: 8px;
-      top: 35px;
-    }
-
-    /* PAINEL DE INFORMAÇÕES */
-    .info {
-      flex: 0.8;
-      background: #1e293b;
-      border: 1px solid #475569;
-      border-radius: 20px;
-      padding: 30px;
-      min-height: 500px;
-    }
-
-    .info h2 {
-      color: #38bdf8;
-      margin-bottom: 20px;
-    }
-
-    .info h3 {
-      color: #facc15;
-      font-size: 25px;
+    .panel-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 15px;
     }
 
-    .info p {
-      color: #cbd5e1;
-      line-height: 1.7;
-      font-size: 17px;
+    .panel-title h2 {
+      font-size: 18px;
     }
 
-    .instrucao {
-      margin-top: 30px;
-      padding: 15px;
-      background: #0f172a;
+    .status {
+      color: #74d99f;
+      font-size: 12px;
+    }
+
+    /* ÁREA DO MOTOR */
+    .engine-stage {
+      min-height: 590px;
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at center, #233242 0%, #101821 52%, #090e14 100%);
+    }
+
+    .grid {
+      position: absolute;
+      inset: 0;
+      opacity: .12;
+      background-image:
+        linear-gradient(#66809b 1px, transparent 1px),
+        linear-gradient(90deg, #66809b 1px, transparent 1px);
+      background-size: 35px 35px;
+    }
+
+    .engine-label {
+      position: absolute;
+      top: 18px;
+      left: 20px;
+      color: #6f8194;
+      font-size: 11px;
+      letter-spacing: 2px;
+    }
+
+    .engine {
+      width: 760px;
+      height: 510px;
+      position: absolute;
+      left: 50%;
+      top: 65px;
+      transform: translateX(-50%);
+    }
+
+    /* TODAS AS PEÇAS CLICÁVEIS */
+    .part {
+      position: absolute;
+      cursor: pointer;
+      transition: opacity .35s, filter .35s, transform .35s;
+    }
+
+    .part:hover {
+      filter: brightness(1.3);
+    }
+
+    .part.active {
+      filter: brightness(1.5) drop-shadow(0 0 12px var(--accent));
+      z-index: 30 !important;
+    }
+
+    .engine.focus-mode .part:not(.active) {
+      opacity: .22;
+    }
+
+    /* BLOCO DO MOTOR */
+    .block {
+      position: absolute;
+      left: 115px;
+      top: 125px;
+      width: 535px;
+      height: 280px;
+      border-radius: 25px 25px 35px 35px;
+      background:
+        linear-gradient(90deg,
+          #313c46 0%,
+          #5a6873 18%,
+          #28323b 40%,
+          #65737d 58%,
+          #2d3740 100%);
+      box-shadow:
+        inset 0 12px 18px rgba(255,255,255,.12),
+        inset 0 -18px 25px rgba(0,0,0,.35),
+        0 20px 35px rgba(0,0,0,.4);
+      border: 3px solid #182029;
+    }
+
+    .block::after {
+      content: "";
+      position: absolute;
+      inset: 22px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 18px;
+    }
+
+    /* CABEÇOTE */
+    .head {
+      left: 100px;
+      top: 55px;
+      width: 565px;
+      height: 100px;
+      border-radius: 20px 20px 12px 12px;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          #77848c 0px,
+          #77848c 16px,
+          #4e5a63 18px,
+          #4e5a63 24px
+        );
+      border: 3px solid #26313a;
+      box-shadow: inset 0 10px 12px rgba(255,255,255,.15);
+      z-index: 8;
+    }
+
+    .head-title {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      top: 35px;
+      color: rgba(255,255,255,.35);
+      font-size: 13px;
+      letter-spacing: 3px;
+    }
+
+    /* CILINDROS */
+    .cylinder {
+      width: 100px;
+      height: 210px;
+      top: 145px;
+      background:
+        linear-gradient(90deg, #12181e, #34404a 25%, #11171c 55%, #3d4851);
+      border: 5px solid #222c34;
+      border-radius: 12px;
+      z-index: 4;
+      box-shadow: inset 10px 0 20px rgba(0,0,0,.5);
+    }
+
+    /* PISTÕES */
+    .piston {
+      width: 76px;
+      height: 62px;
+      border-radius: 8px 8px 14px 14px;
+      background:
+        linear-gradient(180deg, #e3e8e9 0%, #a8b2b8 35%, #6d7982 100%);
+      border: 2px solid #4e5960;
+      z-index: 10;
+      box-shadow:
+        inset 0 8px 8px rgba(255,255,255,.4),
+        0 5px 10px rgba(0,0,0,.4);
+    }
+
+    .piston::before,
+    .piston::after {
+      content: "";
+      position: absolute;
+      left: 4px;
+      width: 64px;
+      height: 2px;
+      background: #3f474c;
+    }
+
+    .piston::before { top: 12px; }
+    .piston::after { top: 20px; }
+
+    /* BIELAS */
+    .rod {
+      width: 24px;
+      height: 150px;
+      background: linear-gradient(90deg, #6e7b84, #d0d6d8, #59646c);
+      border-radius: 15px;
+      transform-origin: 50% 0;
+      z-index: 7;
+      box-shadow: 3px 0 8px rgba(0,0,0,.4);
+    }
+
+    .rod::after {
+      content: "";
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      left: -8px;
+      bottom: -10px;
+      border-radius: 50%;
+      background: #65727b;
+      border: 6px solid #333d45;
+    }
+
+    /* VIRABREQUIM */
+    .crank {
+      left: 135px;
+      top: 380px;
+      width: 500px;
+      height: 55px;
+      z-index: 15;
+    }
+
+    .crank-main {
+      position: absolute;
+      top: 18px;
+      width: 100%;
+      height: 20px;
+      border-radius: 15px;
+      background: linear-gradient(#d5dde0, #59656e);
+      box-shadow: 0 8px 10px rgba(0,0,0,.5);
+    }
+
+    .crank-pin {
+      position: absolute;
+      width: 36px;
+      height: 36px;
+      top: 10px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #e4ebed, #66737c 55%, #28323a);
+      border: 3px solid #1d252c;
+    }
+
+    /* VÁLVULAS */
+    .valve {
+      width: 14px;
+      height: 92px;
+      top: 105px;
+      background: linear-gradient(90deg, #8e9aa0, #eef1f2, #68747b);
       border-radius: 10px;
-      color: #94a3b8;
+      z-index: 20;
+    }
+
+    .valve::after {
+      content: "";
+      position: absolute;
+      width: 30px;
+      height: 9px;
+      left: -8px;
+      bottom: -2px;
+      border-radius: 50%;
+      background: #6f7b81;
+    }
+
+    /* VELA */
+    .spark {
+      width: 30px;
+      height: 100px;
+      top: 25px;
+      z-index: 25;
+    }
+
+    .spark .ceramic {
+      width: 22px;
+      height: 52px;
+      margin: auto;
+      background: repeating-linear-gradient(
+        #f0eee8 0 7px,
+        #b9b8b2 8px 10px
+      );
+      border-radius: 4px;
+    }
+
+    .spark .metal {
+      width: 10px;
+      height: 42px;
+      margin: auto;
+      background: linear-gradient(90deg, #4c555a, #d9e0e1, #3c4449);
+    }
+
+    /* POSIÇÕES */
+    .c1 { left: 135px; }
+    .c2 { left: 260px; }
+    .c3 { left: 385px; }
+    .c4 { left: 510px; }
+
+    .p1 { left: 147px; top: 195px; }
+    .p2 { left: 272px; top: 230px; }
+    .p3 { left: 397px; top: 180px; }
+    .p4 { left: 522px; top: 245px; }
+
+    .r1 { left: 173px; top: 252px; transform: rotate(8deg); }
+    .r2 { left: 298px; top: 287px; transform: rotate(-9deg); }
+    .r3 { left: 423px; top: 237px; transform: rotate(10deg); }
+    .r4 { left: 548px; top: 302px; transform: rotate(-10deg); }
+
+    .v1 { left: 155px; }
+    .v2 { left: 195px; }
+    .v3 { left: 280px; }
+    .v4 { left: 320px; }
+    .v5 { left: 405px; }
+    .v6 { left: 445px; }
+    .v7 { left: 530px; }
+    .v8 { left: 570px; }
+
+    .s1 { left: 215px; }
+    .s2 { left: 340px; }
+    .s3 { left: 465px; }
+    .s4 { left: 590px; }
+
+    /* PAINEL DE INFORMAÇÕES */
+    .info-panel {
+      padding: 28px;
+      min-height: 590px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .info-panel h2 {
+      color: var(--blue);
+      margin-bottom: 8px;
+    }
+
+    .info-panel .subtitle {
+      color: var(--muted);
       font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 28px;
+    }
+
+    .selected-icon {
+      width: 60px;
+      height: 60px;
+      display: grid;
+      place-items: center;
+      background: #243241;
+      border: 1px solid #3b4d60;
+      border-radius: 15px;
+      font-size: 28px;
+      margin-bottom: 18px;
+    }
+
+    #part-name {
+      color: var(--accent);
+      font-size: 27px;
+      margin-bottom: 14px;
+    }
+
+    #part-description {
+      color: #c5d0dc;
+      line-height: 1.75;
+      font-size: 15px;
+    }
+
+    .details {
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px solid #2b3a49;
+    }
+
+    .details h4 {
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    #part-extra {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .reset {
+      margin-top: auto;
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #405469;
+      background: #202d3a;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .reset:hover {
+      background: #2c3c4c;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .legend span {
+      padding: 6px 10px;
+      background: #16212c;
+      border: 1px solid #293a49;
+      border-radius: 20px;
+      color: #8fa0af;
+      font-size: 11px;
+    }
+
+    .cycle-section {
+      width: min(1400px, 95%);
+      margin: 0 auto 35px;
+      background: #111923;
+      border: 1px solid #2b3a49;
+      border-radius: 20px;
+      padding: 25px;
+    }
+
+    .cycle-section h2 {
+      margin-bottom: 18px;
+    }
+
+    .cycle {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .step {
+      padding: 18px;
+      background: #17222d;
+      border: 1px solid #293947;
+      border-radius: 14px;
+    }
+
+    .step strong {
+      display: block;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .step p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
     }
 
     footer {
       text-align: center;
-      padding: 20px;
-      color: #64748b;
+      color: #617284;
+      padding: 25px;
+      font-size: 13px;
     }
 
-    @media (max-width: 850px) {
+    @media (max-width: 1000px) {
       .container {
-        flex-direction: column;
+        grid-template-columns: 1fr;
       }
 
-      .motor {
-        transform: scale(0.8);
+      .info-panel {
+        min-height: 400px;
+      }
+    }
+
+    @media (max-width: 750px) {
+      .engine-stage {
+        min-height: 500px;
+      }
+
+      .engine {
+        transform: translateX(-50%) scale(.68);
         transform-origin: top center;
-        margin-bottom: -50px;
+      }
+
+      .cycle {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 450px) {
+      .engine-stage {
+        min-height: 410px;
+      }
+
+      .engine {
+        transform: translateX(-50%) scale(.52);
+      }
+
+      .cycle {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -223,145 +566,348 @@
 
 <body>
 
-<header>
-  <h1>🔧 Motor Interativo</h1>
-  <p>Clique em uma peça do motor para aprender sobre sua função.</p>
-</header>
+  <header>
+    <div class="tag">MODELO EDUCATIVO INTERATIVO</div>
+    <h1>Funcionamento de um Motor Convencional</h1>
+    <p>
+      Explore um motor de quatro cilindros em corte. Clique nas peças
+      para entender sua função dentro do funcionamento do motor.
+    </p>
+  </header>
 
-<main class="container">
+  <main class="container">
 
-  <section class="motor-area">
-    <h2>Modelo educativo do motor</h2>
-
-    <div class="motor">
-
-      <!-- BLOCO -->
-      <div class="bloco"></div>
-
-      <!-- CABEÇOTE -->
-      <div class="peca cabecote"
-           data-nome="Cabeçote"
-           data-info="O cabeçote fica na parte superior do motor. Ele abriga componentes importantes, como válvulas e velas de ignição, e ajuda a formar a câmara de combustão."
-           style="left:95px;">
+    <section class="engine-panel">
+      <div class="panel-title">
+        <h2>🔧 Motor em corte — 4 cilindros</h2>
+        <span class="status">● MODELO INTERATIVO</span>
       </div>
 
-      <!-- CILINDROS E PISTÕES -->
-      <div class="cilindro" style="left:130px;"></div>
-      <div class="cilindro" style="left:230px;"></div>
-      <div class="cilindro" style="left:330px;"></div>
-      <div class="cilindro" style="left:430px;"></div>
+      <div class="engine-stage">
+        <div class="grid"></div>
+        <div class="engine-label">VISUALIZAÇÃO INTERNA DO MOTOR</div>
 
-      <div class="peca pistao"
-           style="left:140px;"
-           data-nome="Pistão"
-           data-info="O pistão se movimenta para cima e para baixo dentro do cilindro. Esse movimento é uma parte fundamental do funcionamento do motor.">
+        <div class="engine" id="engine">
+
+          <!-- BLOCO -->
+          <div class="block"></div>
+
+          <!-- CABEÇOTE -->
+          <div class="part head"
+               data-name="Cabeçote"
+               data-icon="🔩"
+               data-description="O cabeçote fica na parte superior do motor e fecha os cilindros. Ele abriga componentes importantes, como válvulas e velas de ignição."
+               data-extra="Trabalha junto com o bloco do motor para formar as câmaras onde ocorre a combustão.">
+            <div class="head-title">CABEÇOTE</div>
+          </div>
+
+          <!-- CILINDROS -->
+          <div class="part cylinder c1"
+               data-name="Cilindro"
+               data-icon="⭕"
+               data-description="O cilindro é o espaço onde o pistão se movimenta. Em um motor de quatro cilindros, cada cilindro possui seu próprio pistão."
+               data-extra="Os cilindros fazem parte do bloco do motor e precisam suportar altas temperaturas e pressões."></div>
+
+          <div class="part cylinder c2"
+               data-name="Cilindro"
+               data-icon="⭕"
+               data-description="Os cilindros guiam o movimento dos pistões durante o funcionamento do motor."
+               data-extra="O conjunto de cilindros trabalha em sequência para produzir um funcionamento mais equilibrado."></div>
+
+          <div class="part cylinder c3"
+               data-name="Cilindro"
+               data-icon="⭕"
+               data-description="Dentro do cilindro acontece o ciclo de funcionamento do motor."
+               data-extra="O pistão se desloca dentro dele durante as quatro etapas do ciclo."></div>
+
+          <div class="part cylinder c4"
+               data-name="Cilindro"
+               data-icon="⭕"
+               data-description="O quarto cilindro trabalha junto com os outros para gerar força e manter o motor em funcionamento."
+               data-extra="Cada cilindro realiza seu ciclo em momentos diferentes."></div>
+
+          <!-- PISTÕES -->
+          <div class="part piston p1"
+               data-name="Pistão"
+               data-icon="⬆️"
+               data-description="O pistão se movimenta para cima e para baixo dentro do cilindro. Ele recebe a força gerada pela combustão e transmite esse movimento para a biela."
+               data-extra="É uma das peças fundamentais para transformar a energia da combustão em movimento mecânico."></div>
+
+          <div class="part piston p2"
+               data-name="Pistão"
+               data-icon="⬆️"
+               data-description="Os pistões trabalham em diferentes posições e momentos para manter o motor funcionando de forma contínua."
+               data-extra="Cada pistão está conectado a uma biela e ao conjunto do virabrequim."></div>
+
+          <div class="part piston p3"
+               data-name="Pistão"
+               data-icon="⬆️"
+               data-description="O movimento alternado do pistão é uma parte essencial do ciclo de quatro tempos."
+               data-extra="O pistão participa das etapas de admissão, compressão, combustão e escape."></div>
+
+          <div class="part piston p4"
+               data-name="Pistão"
+               data-icon="⬆️"
+               data-description="Em um motor de quatro cilindros, os pistões não se movimentam todos da mesma forma ao mesmo tempo."
+               data-extra="Essa sequência ajuda o motor a produzir movimento de maneira mais uniforme."></div>
+
+          <!-- BIELAS -->
+          <div class="part rod r1"
+               data-name="Biela"
+               data-icon="🔗"
+               data-description="A biela conecta o pistão ao virabrequim. Ela transmite o movimento vertical do pistão para o conjunto rotativo do motor."
+               data-extra="A biela é responsável por suportar grandes esforços durante o funcionamento do motor."></div>
+
+          <div class="part rod r2"
+               data-name="Biela"
+               data-icon="🔗"
+               data-description="As bielas fazem a ligação mecânica entre os pistões e o virabrequim."
+               data-extra="Elas mudam de posição continuamente conforme o virabrequim gira."></div>
+
+          <div class="part rod r3"
+               data-name="Biela"
+               data-icon="🔗"
+               data-description="Cada pistão possui uma ligação com o sistema rotativo por meio de uma biela."
+               data-extra="Esse conjunto permite transformar o movimento alternado em rotação."></div>
+
+          <div class="part rod r4"
+               data-name="Biela"
+               data-icon="🔗"
+               data-description="A biela trabalha em conjunto com o pistão e o virabrequim durante todo o funcionamento do motor."
+               data-extra="É uma peça essencial para a transmissão de força dentro do motor."></div>
+
+          <!-- VIRABREQUIM -->
+          <div class="part crank"
+               data-name="Virabrequim"
+               data-icon="⚙️"
+               data-description="O virabrequim transforma o movimento de subida e descida dos pistões em movimento rotativo. Essa rotação é utilizada para movimentar o sistema de transmissão do veículo."
+               data-extra="É uma das principais peças mecânicas do motor e trabalha conectado às bielas."
+               style="left:135px; top:380px;">
+            <div class="crank-main"></div>
+            <div class="crank-pin" style="left:35px;"></div>
+            <div class="crank-pin" style="left:155px;"></div>
+            <div class="crank-pin" style="left:280px;"></div>
+            <div class="crank-pin" style="left:405px;"></div>
+          </div>
+
+          <!-- VÁLVULAS -->
+          <div class="part valve v1"
+               data-name="Válvulas"
+               data-icon="💨"
+               data-description="As válvulas controlam a entrada da mistura de ar e combustível e a saída dos gases do motor."
+               data-extra="Elas precisam abrir e fechar no momento correto para que o ciclo do motor funcione."></div>
+
+          <div class="part valve v2"
+               data-name="Válvulas"
+               data-icon="💨"
+               data-description="As válvulas trabalham em conjunto com o comando de válvulas."
+               data-extra="Existem válvulas responsáveis pela admissão e outras pelo escape."></div>
+
+          <div class="part valve v3"
+               data-name="Válvulas"
+               data-icon="💨"
+               data-description="As válvulas controlam o fluxo de gases para dentro e para fora do motor."
+               data-extra="O tempo correto de abertura é importante para o funcionamento eficiente do motor."></div>
+
+          <div class="part valve v4"
+               data-name="Válvulas"
+               data-icon="💨"
+               data-description="As válvulas ficam localizadas na região do cabeçote."
+               data-extra="Elas participam diretamente das etapas de admissão e escape."></div>
+
+          <div class="part valve v5"
+               data-name="Válvulas"
+               data-icon="💨"
+               data-description="O conjunto de válvulas controla os gases em cada cilindro."
+               data-extra="Seu movimento é sincronizado com o funcionamento dos pistões."></div>
+
+          <div class="part valve v6"
+               data-name="Válvulas"
+               data-icon="💨"
+               data-description="As válvulas ajudam a manter o ciclo do motor organizado e sincronizado."
+               data-extra="Cada cilindro possui seu próprio conjunto de componentes no cabeçote."></div>
+
+          <div class="part valve v7"
+               data-name="Válvulas"
+               data-icon="💨"
+               data-description="As válvulas permitem a saída dos gases após o ciclo de combustão."
+               data-extra="Elas precisam fechar corretamente para manter a pressão dentro do cilindro."></div>
+
+          <div class="part valve v8"
+               data-name="Válvulas"
+               data-icon="💨"
+               data-description="O movimento das válvulas é controlado pelo sistema de comando do motor."
+               data-extra="Elas trabalham continuamente durante o funcionamento do motor."></div>
+
+          <!-- VELAS -->
+          <div class="part spark s1"
+               data-name="Vela de ignição"
+               data-icon="⚡"
+               data-description="Nos motores a gasolina, a vela de ignição produz uma faísca que inicia a combustão da mistura comprimida dentro do cilindro."
+               data-extra="A ignição acontece no momento correto do ciclo para produzir a força que movimenta o pistão.">
+            <div class="ceramic"></div>
+            <div class="metal"></div>
+          </div>
+
+          <div class="part spark s2"
+               data-name="Vela de ignição"
+               data-icon="⚡"
+               data-description="Cada cilindro de um motor a gasolina normalmente possui uma vela de ignição."
+               data-extra="As velas precisam trabalhar sincronizadas com o ciclo do motor.">
+            <div class="ceramic"></div>
+            <div class="metal"></div>
+          </div>
+
+          <div class="part spark s3"
+               data-name="Vela de ignição"
+               data-icon="⚡"
+               data-description="A faísca da vela inicia a combustão da mistura dentro da câmara."
+               data-extra="Esse processo libera energia que empurra o pistão.">
+            <div class="ceramic"></div>
+            <div class="metal"></div>
+          </div>
+
+          <div class="part spark s4"
+               data-name="Vela de ignição"
+               data-icon="⚡"
+               data-description="A vela é um componente importante do sistema de ignição dos motores a gasolina."
+               data-extra="Ela atua na etapa em que a energia da combustão é liberada.">
+            <div class="ceramic"></div>
+            <div class="metal"></div>
+          </div>
+
+        </div>
       </div>
 
-      <div class="peca pistao"
-           style="left:240px;"
-           data-nome="Pistão"
-           data-info="Os pistões trabalham dentro dos cilindros e ajudam a transformar a energia gerada no motor em movimento.">
+      <div class="legend">
+        <span>🖱️ Clique em uma peça</span>
+        <span>✨ Peça selecionada fica destacada</span>
+        <span>🔍 Outras peças ficam em segundo plano</span>
+      </div>
+    </section>
+
+    <!-- PAINEL LATERAL -->
+    <aside class="info-panel">
+
+      <h2>Explorador do Motor</h2>
+      <p class="subtitle">
+        Selecione qualquer componente do modelo para entender sua função.
+      </p>
+
+      <div class="selected-icon" id="part-icon">🔧</div>
+
+      <h3 id="part-name">Selecione uma peça</h3>
+
+      <p id="part-description">
+        Clique em uma das peças do motor para destacá-la e descobrir
+        como ela participa do funcionamento do conjunto.
+      </p>
+
+      <div class="details">
+        <h4>Como ela trabalha?</h4>
+        <p id="part-extra">
+          O motor é formado por diversos componentes que trabalham juntos
+          para transformar a energia da combustão em movimento.
+        </p>
       </div>
 
-      <div class="peca pistao"
-           style="left:340px;"
-           data-nome="Pistão"
-           data-info="O movimento dos pistões é transmitido para as bielas e, posteriormente, para o virabrequim.">
+      <button class="reset" id="reset">
+        Limpar seleção
+      </button>
+
+    </aside>
+
+  </main>
+
+  <!-- CICLO DE QUATRO TEMPOS -->
+  <section class="cycle-section">
+
+    <h2>🔄 O ciclo básico de quatro tempos</h2>
+
+    <div class="cycle">
+
+      <div class="step">
+        <strong>1. Admissão</strong>
+        <p>
+          O pistão se movimenta para baixo enquanto ocorre a entrada da
+          mistura necessária para o funcionamento do motor.
+        </p>
       </div>
 
-      <div class="peca pistao"
-           style="left:440px;"
-           data-nome="Pistão"
-           data-info="Em um motor de quatro cilindros, vários pistões trabalham em sequência para manter o motor funcionando.">
+      <div class="step">
+        <strong>2. Compressão</strong>
+        <p>
+          O pistão sobe e comprime a mistura dentro do cilindro,
+          preparando-a para a próxima etapa.
+        </p>
       </div>
 
-      <!-- BIELAS -->
-      <div class="peca biela"
-           style="left:158px;"
-           data-nome="Biela"
-           data-info="A biela conecta o pistão ao virabrequim. Ela transmite o movimento do pistão para ajudar a girar o virabrequim.">
+      <div class="step">
+        <strong>3. Combustão</strong>
+        <p>
+          Nos motores a gasolina, a ignição inicia a combustão, liberando
+          energia e movimentando o pistão.
+        </p>
       </div>
 
-      <div class="peca biela"
-           style="left:258px;"
-           data-nome="Biela"
-           data-info="A biela é uma peça importante na ligação entre o movimento vertical do pistão e o movimento rotativo do motor.">
-      </div>
-
-      <!-- VIRABREQUIM -->
-      <div class="peca virabrequim"
-           data-nome="Virabrequim"
-           data-info="O virabrequim transforma o movimento de subida e descida dos pistões em movimento de rotação. Esse movimento é enviado para o sistema de transmissão do veículo.">
-      </div>
-
-      <!-- VÁLVULAS -->
-      <div class="peca valvula"
-           style="left:160px;"
-           data-nome="Válvulas"
-           data-info="As válvulas controlam a entrada de ar para o motor e a saída dos gases após a combustão.">
-      </div>
-
-      <div class="peca valvula"
-           style="left:360px;"
-           data-nome="Válvulas"
-           data-info="As válvulas abrem e fecham no momento certo para permitir o funcionamento correto do ciclo do motor.">
-      </div>
-
-      <!-- VELA -->
-      <div class="peca vela"
-           style="left:270px;"
-           data-nome="Vela de ignição"
-           data-info="Nos motores a gasolina, a vela de ignição produz uma faísca que inicia a combustão da mistura de ar e combustível.">
+      <div class="step">
+        <strong>4. Escape</strong>
+        <p>
+          Os gases resultantes do processo são direcionados para fora
+          do cilindro através do sistema de escape.
+        </p>
       </div>
 
     </div>
+
   </section>
 
-  <!-- PAINEL -->
-  <aside class="info">
-    <h2>📚 Conheça o motor</h2>
+  <footer>
+    Projeto educativo • Modelo simplificado de um motor convencional de quatro cilindros
+  </footer>
 
-    <h3 id="nomePeca">Selecione uma peça</h3>
+  <script>
+    const engine = document.getElementById("engine");
+    const parts = document.querySelectorAll(".part");
 
-    <p id="descricao">
-      Clique em uma das peças do motor para destacá-la e descobrir qual é sua função.
-    </p>
+    const partName = document.getElementById("part-name");
+    const partIcon = document.getElementById("part-icon");
+    const partDescription = document.getElementById("part-description");
+    const partExtra = document.getElementById("part-extra");
+    const resetButton = document.getElementById("reset");
 
-    <div class="instrucao">
-      💡 Dica: clique no pistão, biela, virabrequim, válvulas, cabeçote ou vela de ignição.
-    </div>
-  </aside>
+    parts.forEach(part => {
+      part.addEventListener("click", () => {
 
-</main>
+        parts.forEach(item => {
+          item.classList.remove("active");
+        });
 
-<footer>
-  Projeto educativo — Funcionamento básico de um motor convencional 🚗
-</footer>
+        part.classList.add("active");
+        engine.classList.add("focus-mode");
 
-<script>
-  const pecas = document.querySelectorAll(".peca");
-  const nomePeca = document.getElementById("nomePeca");
-  const descricao = document.getElementById("descricao");
-
-  pecas.forEach(peca => {
-    peca.addEventListener("click", () => {
-
-      // Remove o destaque anterior
-      pecas.forEach(item => {
-        item.classList.remove("ativa");
-        item.style.opacity = "0.45";
+        partName.textContent = part.dataset.name;
+        partIcon.textContent = part.dataset.icon;
+        partDescription.textContent = part.dataset.description;
+        partExtra.textContent = part.dataset.extra;
       });
-
-      // Destaca a peça selecionada
-      peca.classList.add("ativa");
-      peca.style.opacity = "1";
-
-      // Atualiza as informações
-      nomePeca.textContent = peca.dataset.nome;
-      descricao.textContent = peca.dataset.info;
     });
-  });
-</script>
+
+    resetButton.addEventListener("click", () => {
+      parts.forEach(item => item.classList.remove("active"));
+
+      engine.classList.remove("focus-mode");
+
+      partName.textContent = "Selecione uma peça";
+      partIcon.textContent = "🔧";
+
+      partDescription.textContent =
+        "Clique em uma das peças do motor para destacá-la e descobrir como ela participa do funcionamento do conjunto.";
+
+      partExtra.textContent =
+        "O motor é formado por diversos componentes que trabalham juntos para transformar a energia da combustão em movimento.";
+    });
+  </script>
 
 </body>
 </html>
